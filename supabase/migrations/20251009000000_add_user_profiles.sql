@@ -1,4 +1,4 @@
--- Add user profiles table for height, weight, BMI, and goals
+`-- Add user profiles table for height, weight, BMI, and goals
 CREATE TABLE public.user_profiles (
   id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -162,3 +162,4 @@ USING (auth.uid() = user_id);
 CREATE INDEX reminders_user_id_idx ON public.reminders(user_id);
 CREATE INDEX reminders_scheduled_time_idx ON public.reminders(scheduled_time);
 CREATE INDEX reminders_status_idx ON public.reminders(status);
+`
