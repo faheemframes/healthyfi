@@ -23,12 +23,9 @@ interface UserProfileData {
   age: number | null;
   gender: string | null;
   activity_level: string | null;
-  goal_type: string | null;
-  target_weight_kg: number | null;
+  goal: string | null;
   daily_calorie_goal: number | null;
   daily_water_goal_ml: number;
-  reminder_enabled: boolean;
-  reminder_times: string[];
 }
 
 const UserProfile = ({ userId, onProfileUpdated }: UserProfileProps) => {
@@ -39,12 +36,9 @@ const UserProfile = ({ userId, onProfileUpdated }: UserProfileProps) => {
     age: null,
     gender: null,
     activity_level: null,
-    goal_type: null,
-    target_weight_kg: null,
+    goal: null,
     daily_calorie_goal: null,
     daily_water_goal_ml: 2500,
-    reminder_enabled: true,
-    reminder_times: ['09:00', '13:00', '18:00']
   });
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -83,7 +77,12 @@ const UserProfile = ({ userId, onProfileUpdated }: UserProfileProps) => {
       }
 
       if (data) {
-        setProfile(data);
+        // Handle both old schema (goal_type) and new schema (goal)
+        const normalizedData: any = {
+          ...data,
+          goal: (data as any).goal || (data as any).goal_type || null
+        };
+        setProfile(normalizedData);
       }
     } catch (error: any) {
       console.error("Error fetching profile:", error);
@@ -257,46 +256,30 @@ const UserProfile = ({ userId, onProfileUpdated }: UserProfileProps) => {
         </div>
 
         {/* Goals */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label className="flex items-center gap-2">
-              <Target className="h-4 w-4" />
-              Goal Type
-            </Label>
-            <Select
-              value={profile.goal_type || ""}
-              onValueChange={(value) => setProfile({ ...profile, goal_type: value })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select goal" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="maintain">Maintain Weight</SelectItem>
-                <SelectItem value="lose">Lose Weight</SelectItem>
-                <SelectItem value="gain">Gain Weight</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          {profile.goal_type && profile.goal_type !== 'maintain' && (
-            <div className="space-y-2">
-              <Label htmlFor="target-weight">Target Weight (kg)</Label>
-              <Input
-                id="target-weight"
-                type="number"
-                step="0.1"
-                placeholder="65.0"
-                value={profile.target_weight_kg || ""}
-                onChange={(e) => setProfile({ ...profile, target_weight_kg: parseFloat(e.target.value) || null })}
-              />
-            </div>
-          )}
+        <div className="space-y-2">
+          <Label className="flex items-center gap-2">
+            <Target className="h-4 w-4" />
+            Health Goal
+          </Label>
+          <Select
+            value={profile.goal || ""}
+            onValueChange={(value) => setProfile({ ...profile, goal: value })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select goal" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="maintain">Maintain Weight</SelectItem>
+              <SelectItem value="lose">Lose Weight</SelectItem>
+              <SelectItem value="gain">Gain Weight</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Daily Goals */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="calorie-goal">Daily Calorie Goal</Label>
+            <Label htmlFor="calorie-goal">Daily Calorie Goal (optional)</Label>
             <Input
               id="calorie-goal"
               type="number"
@@ -316,41 +299,6 @@ const UserProfile = ({ userId, onProfileUpdated }: UserProfileProps) => {
               onChange={(e) => setProfile({ ...profile, daily_water_goal_ml: parseInt(e.target.value) || 2500 })}
             />
           </div>
-        </div>
-
-        {/* Reminders */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Label className="flex items-center gap-2">
-              <Bell className="h-4 w-4" />
-              Enable Reminders
-            </Label>
-            <Switch
-              checked={profile.reminder_enabled}
-              onCheckedChange={(checked) => setProfile({ ...profile, reminder_enabled: checked })}
-            />
-          </div>
-          
-          {profile.reminder_enabled && (
-            <div className="space-y-2">
-              <Label>Reminder Times</Label>
-              <div className="flex gap-2 flex-wrap">
-                {profile.reminder_times.map((time, index) => (
-                  <Input
-                    key={index}
-                    type="time"
-                    value={time}
-                    onChange={(e) => {
-                      const newTimes = [...profile.reminder_times];
-                      newTimes[index] = e.target.value;
-                      setProfile({ ...profile, reminder_times: newTimes });
-                    }}
-                    className="w-32"
-                  />
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
         <Button onClick={handleSave} disabled={saving} className="w-full">

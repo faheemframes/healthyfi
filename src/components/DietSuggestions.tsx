@@ -14,7 +14,8 @@ interface DietSuggestionsProps {
     age: number | null;
     gender: string | null;
     activity_level: string | null;
-    goal_type: string | null;
+    goal?: string | null;
+    goal_type?: string | null;
     daily_calorie_goal: number | null;
     daily_water_goal_ml: number;
   } | null;

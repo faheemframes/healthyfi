@@ -10,6 +10,8 @@ import DietSuggestions from "@/components/DietSuggestions";
 import UserProfile from "@/components/UserProfile";
 import ReminderSystem from "@/components/ReminderSystem";
 import EnhancedDashboard from "@/components/EnhancedDashboard";
+import ProfileOnboardingModal from "@/components/ProfileOnboardingModal";
+import ProfileCompletionBanner from "@/components/ProfileCompletionBanner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Flame, Droplets, User, Bell, Settings } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
@@ -22,6 +24,9 @@ const Dashboard = () => {
   const [weeklyData, setWeeklyData] = useState<Array<{ day: string; calories: number; water: number }>>([]);
   const [refreshKey, setRefreshKey] = useState(0);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showCompletionBanner, setShowCompletionBanner] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
     // Check authentication
@@ -56,6 +61,19 @@ const Dashboard = () => {
         .single();
       
       setUserProfile(profile);
+
+      // Check if profile is complete (handle both old and new schema)
+      const goalField = (profile as any)?.goal || (profile as any)?.goal_type;
+      if (!profile || !profile.height_cm || !profile.weight_kg || !profile.age || !profile.gender || !profile.activity_level || !goalField) {
+        // Show onboarding for new users (no profile at all)
+        if (!profile) {
+          setShowOnboarding(true);
+        } else {
+          // Show banner for users with incomplete profiles
+          setShowCompletionBanner(true);
+        }
+      }
+      
       // Get today's date at midnight
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -153,7 +171,14 @@ const Dashboard = () => {
   };
 
   const handleProfileUpdated = () => {
+    setShowOnboarding(false);
+    setShowCompletionBanner(false);
     handleRefresh();
+  };
+
+  const handleCompleteProfile = () => {
+    setActiveTab("profile");
+    setShowCompletionBanner(false);
   };
 
   if (!user) {
@@ -163,7 +188,15 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <Navbar user={user} />
+      <ProfileOnboardingModal 
+        open={showOnboarding} 
+        onComplete={handleProfileUpdated} 
+        userId={user.id}
+      />
       <main className="container mx-auto px-4 py-8">
+        {showCompletionBanner && (
+          <ProfileCompletionBanner onComplete={handleCompleteProfile} />
+        )}
         <div className="mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
             Health Dashboard
@@ -173,7 +206,7 @@ const Dashboard = () => {
           </p>
         </div>
 
-        <Tabs defaultValue="overview" className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <Flame className="h-4 w-4" />

@@ -24,11 +24,12 @@ serve(async (req) => {
     let profileContext = "";
     
     if (userProfile && userProfile.height_cm && userProfile.weight_kg) {
-      const bmi = (userProfile.weight_kg / Math.pow(userProfile.height_cm / 100, 2)).toFixed(1);
+      const bmiValue = userProfile.weight_kg / Math.pow(userProfile.height_cm / 100, 2);
+      const bmi = bmiValue.toFixed(1);
       let bmiCategory = "Normal";
-      if (bmi < 18.5) bmiCategory = "Underweight";
-      else if (bmi >= 25 && bmi < 30) bmiCategory = "Overweight";
-      else if (bmi >= 30) bmiCategory = "Obese";
+      if (bmiValue < 18.5) bmiCategory = "Underweight";
+      else if (bmiValue >= 25 && bmiValue < 30) bmiCategory = "Overweight";
+      else if (bmiValue >= 30) bmiCategory = "Obese";
       
       bmiInfo = `BMI: ${bmi} (${bmiCategory})`;
       
@@ -38,14 +39,14 @@ User Profile:
 - Age: ${userProfile.age || 'Not specified'}
 - Gender: ${userProfile.gender || 'Not specified'}
 - Activity Level: ${userProfile.activity_level || 'Not specified'}
-- Goal: ${userProfile.goal_type || 'Not specified'}
+- Goal: ${userProfile.goal || userProfile.goal_type || 'Not specified'}
 - Daily Calorie Goal: ${userProfile.daily_calorie_goal || 'Not set'} kcal
 - Daily Water Goal: ${userProfile.daily_water_goal_ml || 2500}ml`;
     }
 
     const calorieGoal = userProfile?.daily_calorie_goal || 2000;
     const waterGoal = userProfile?.daily_water_goal_ml || 2500;
-    const goalType = userProfile?.goal_type || 'maintain';
+    const goalType = userProfile?.goal || userProfile?.goal_type || 'maintain';
 
     const prompt = `You are a nutrition expert. Based on the user's daily intake and profile:
 - Total calories: ${calorieIntake} kcal (Goal: ${calorieGoal} kcal)
