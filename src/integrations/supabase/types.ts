@@ -44,6 +44,54 @@ export type Database = {
         }
         Relationships: []
       }
+      user_profiles: {
+        Row: {
+          activity_level: string | null
+          age: number | null
+          bmi: number | null
+          created_at: string
+          daily_calorie_goal: number | null
+          daily_water_goal_ml: number | null
+          gender: string | null
+          goal: string | null
+          height_cm: number | null
+          id: string
+          updated_at: string
+          user_id: string
+          weight_kg: number | null
+        }
+        Insert: {
+          activity_level?: string | null
+          age?: number | null
+          bmi?: number | null
+          created_at?: string
+          daily_calorie_goal?: number | null
+          daily_water_goal_ml?: number | null
+          gender?: string | null
+          goal?: string | null
+          height_cm?: number | null
+          id?: string
+          updated_at?: string
+          user_id: string
+          weight_kg?: number | null
+        }
+        Update: {
+          activity_level?: string | null
+          age?: number | null
+          bmi?: number | null
+          created_at?: string
+          daily_calorie_goal?: number | null
+          daily_water_goal_ml?: number | null
+          gender?: string | null
+          goal?: string | null
+          height_cm?: number | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+          weight_kg?: number | null
+        }
+        Relationships: []
+      }
       water_intake: {
         Row: {
           amount_ml: number
@@ -65,93 +113,6 @@ export type Database = {
           id?: string
           time?: string
           user_id?: string
-        }
-        Relationships: []
-      }
-      user_profiles: {
-        Row: {
-          id: string
-          user_id: string
-          height_cm: number | null
-          weight_kg: number | null
-          age: number | null
-          gender: string | null
-          activity_level: string | null
-          goal_type: string | null
-          target_weight_kg: number | null
-          daily_calorie_goal: number | null
-          daily_water_goal_ml: number
-          reminder_enabled: boolean
-          reminder_times: string[]
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          height_cm?: number | null
-          weight_kg?: number | null
-          age?: number | null
-          gender?: string | null
-          activity_level?: string | null
-          goal_type?: string | null
-          target_weight_kg?: number | null
-          daily_calorie_goal?: number | null
-          daily_water_goal_ml?: number
-          reminder_enabled?: boolean
-          reminder_times?: string[]
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          height_cm?: number | null
-          weight_kg?: number | null
-          age?: number | null
-          gender?: string | null
-          activity_level?: string | null
-          goal_type?: string | null
-          target_weight_kg?: number | null
-          daily_calorie_goal?: number | null
-          daily_water_goal_ml?: number
-          reminder_enabled?: boolean
-          reminder_times?: string[]
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      reminders: {
-        Row: {
-          id: string
-          user_id: string
-          reminder_type: string
-          message: string
-          scheduled_time: string
-          sent_at: string | null
-          status: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          reminder_type: string
-          message: string
-          scheduled_time: string
-          sent_at?: string | null
-          status?: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          reminder_type?: string
-          message?: string
-          scheduled_time?: string
-          sent_at?: string | null
-          status?: string
-          created_at?: string
         }
         Relationships: []
       }

@@ -85,7 +85,7 @@ const ProfileOnboardingModal = ({ open, onComplete, userId }: ProfileOnboardingM
   };
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onComplete()}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">

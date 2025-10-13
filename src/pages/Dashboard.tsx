@@ -8,7 +8,7 @@ import MealForm from "@/components/MealForm";
 import WaterForm from "@/components/WaterForm";
 import DietSuggestions from "@/components/DietSuggestions";
 import UserProfile from "@/components/UserProfile";
-import ReminderSystem from "@/components/ReminderSystem";
+// import ReminderSystem from "@/components/ReminderSystem";
 import EnhancedDashboard from "@/components/EnhancedDashboard";
 import ProfileOnboardingModal from "@/components/ProfileOnboardingModal";
 import ProfileCompletionBanner from "@/components/ProfileCompletionBanner";
@@ -258,7 +258,11 @@ const Dashboard = () => {
           </TabsContent>
 
           <TabsContent value="settings" className="space-y-6">
-            <ReminderSystem userId={user.id} userProfile={userProfile} />
+            {/* <ReminderSystem userId={user.id} userProfile={userProfile} /> */}
+            <div className="text-center py-8 text-muted-foreground">
+              <Bell className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Reminder system coming soon!</p>
+            </div>
           </TabsContent>
         </Tabs>
       </main>
