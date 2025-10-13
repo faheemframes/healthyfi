@@ -247,10 +247,10 @@ const UserProfile = ({ userId, onProfileUpdated }: UserProfileProps) => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="sedentary">Sedentary (little/no exercise)</SelectItem>
-              <SelectItem value="light">Light (light exercise 1-3 days/week)</SelectItem>
-              <SelectItem value="moderate">Moderate (moderate exercise 3-5 days/week)</SelectItem>
-              <SelectItem value="active">Active (hard exercise 6-7 days/week)</SelectItem>
-              <SelectItem value="very_active">Very Active (very hard exercise & physical job)</SelectItem>
+              <SelectItem value="lightly_active">Lightly Active (light exercise 1-3 days/week)</SelectItem>
+              <SelectItem value="moderately_active">Moderately Active (moderate exercise 3-5 days/week)</SelectItem>
+              <SelectItem value="very_active">Very Active (hard exercise 6-7 days/week)</SelectItem>
+              <SelectItem value="extremely_active">Extremely Active (very hard exercise & physical job)</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -269,9 +269,10 @@ const UserProfile = ({ userId, onProfileUpdated }: UserProfileProps) => {
               <SelectValue placeholder="Select goal" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="lose_weight">Lose Weight</SelectItem>
               <SelectItem value="maintain">Maintain Weight</SelectItem>
-              <SelectItem value="lose">Lose Weight</SelectItem>
-              <SelectItem value="gain">Gain Weight</SelectItem>
+              <SelectItem value="gain_weight">Gain Weight</SelectItem>
+              <SelectItem value="build_muscle">Build Muscle</SelectItem>
             </SelectContent>
           </Select>
         </div>
