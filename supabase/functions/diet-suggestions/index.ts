@@ -53,14 +53,24 @@ User Profile:
 - Total water: ${waterIntake}ml (Goal: ${waterGoal}ml)
 - Weight goal: ${goalType}${profileContext}
 
-Provide 3 personalized, actionable health tips to improve their diet and hydration. Keep each tip concise (1-2 sentences). Focus on:
+Provide 3-5 personalized, actionable health tips to improve their diet and hydration. 
+
+IMPORTANT FORMATTING RULES:
+- Return ONLY a valid JSON array of strings
+- Each tip should be 1-2 complete sentences
+- Do NOT include numbering (1., 2., etc.)
+- Do NOT include extra quotes or escape characters
+- Each string should be clear and readable
+
+Focus on:
 1. Calorie balance analysis based on their goal (${goalType} weight)
 2. Hydration assessment and recommendations
-3. One specific nutrition habit based on their BMI and goals
+3. Specific nutrition habits based on their BMI and activity level
+4. Practical meal timing or food choices
 
 Make suggestions specific to their profile data and current intake. Be encouraging and practical.
 
-Format as a JSON array of strings.`;
+Example format: ["Your calorie intake is below your goal. Consider adding a healthy snack.", "Great hydration! Keep drinking water throughout the day.", "With your activity level, ensure you're getting enough protein."]`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

@@ -99,9 +99,12 @@ const UserProfile = ({ userId, onProfileUpdated }: UserProfileProps) => {
   const handleSave = async () => {
     setSaving(true);
     try {
+      // Exclude BMI from upsert since it's a generated column
+      const { bmi, ...profileToSave } = profile as any;
+      
       const { error } = await supabase
         .from("user_profiles")
-        .upsert(profile, { onConflict: 'user_id' });
+        .upsert(profileToSave, { onConflict: 'user_id' });
 
       if (error) throw error;
 

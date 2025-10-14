@@ -36,29 +36,39 @@ const DietSuggestions = ({ calorieIntake, waterIntake, userProfile }: DietSugges
         },
       });
 
-      if (error) throw error;
-
-      // Parse the AI response
-      let parsedSuggestions: string[] = [];
-      try {
-        // Try to parse as JSON first
-        if (typeof data.suggestions === 'string') {
-          parsedSuggestions = JSON.parse(data.suggestions);
-        } else if (Array.isArray(data.suggestions)) {
-          parsedSuggestions = data.suggestions;
-        } else {
-          throw new Error('Invalid response format');
-        }
-      } catch {
-        // If not valid JSON, split by newlines and filter
-        const suggestionsText = typeof data.suggestions === 'string' ? data.suggestions : JSON.stringify(data.suggestions);
-        parsedSuggestions = suggestionsText
-          .split("\n")
-          .filter((s: string) => s.trim().length > 0)
-          .slice(0, 3);
+      if (error) {
+        console.error("Edge function error:", error);
+        throw new Error(error.message || "Failed to generate suggestions");
       }
 
-      setSuggestions(parsedSuggestions);
+      if (!data?.suggestions) {
+        throw new Error("No suggestions received from AI");
+      }
+
+      // Parse the AI response with better formatting handling
+      let parsedSuggestions: string[] = [];
+      
+      if (typeof data.suggestions === 'string') {
+        try {
+          // Try to parse as JSON array first
+          const parsed = JSON.parse(data.suggestions);
+          parsedSuggestions = Array.isArray(parsed) ? parsed : [parsed];
+        } catch {
+          // If not JSON, split intelligently by periods or newlines
+          parsedSuggestions = data.suggestions
+            .split(/(?:\d+\.\s+|\n+)/)
+            .map((s: string) => s.trim())
+            .filter((s: string) => s.length > 20) // Filter out very short fragments
+            .map((s: string) => s.replace(/^[\[\]"]+|[\[\]"]+$/g, '').trim()) // Clean quotes and brackets
+            .slice(0, 5); // Limit to 5 suggestions
+        }
+      } else if (Array.isArray(data.suggestions)) {
+        parsedSuggestions = data.suggestions;
+      } else {
+        parsedSuggestions = [String(data.suggestions)];
+      }
+
+      setSuggestions(parsedSuggestions.filter(s => s && s.length > 0));
       toast({
         title: "Suggestions Generated",
         description: "AI has analyzed your intake and provided personalized tips.",
@@ -67,7 +77,7 @@ const DietSuggestions = ({ calorieIntake, waterIntake, userProfile }: DietSugges
       console.error("Error getting suggestions:", error);
       toast({
         title: "Error",
-        description: error.message || "Failed to get AI suggestions",
+        description: error.message || "Failed to get AI suggestions. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -99,13 +109,18 @@ const DietSuggestions = ({ calorieIntake, waterIntake, userProfile }: DietSugges
         </Button>
 
         {suggestions.length > 0 && (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {suggestions.map((suggestion, index) => (
               <div
                 key={index}
-                className="p-3 rounded-lg bg-secondary/50 border border-border"
+                className="p-5 bg-secondary/50 rounded-lg border border-border/50 shadow-sm hover:shadow-md transition-shadow"
               >
-                <p className="text-sm text-foreground">{suggestion}</p>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-semibold">
+                    {index + 1}
+                  </span>
+                  <p className="text-sm leading-relaxed flex-1 text-foreground">{suggestion}</p>
+                </div>
               </div>
             ))}
           </div>

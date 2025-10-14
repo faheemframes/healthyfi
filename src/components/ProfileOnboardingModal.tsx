@@ -54,7 +54,8 @@ const ProfileOnboardingModal = ({ open, onComplete, userId }: ProfileOnboardingM
 
     setSaving(true);
     try {
-      const { error } = await supabase.from("user_profiles").upsert({
+      // Exclude BMI from upsert since it's a generated column
+      const profileData = {
         user_id: userId,
         height_cm: parseInt(profile.height_cm),
         weight_kg: parseFloat(profile.weight_kg),
@@ -64,9 +65,14 @@ const ProfileOnboardingModal = ({ open, onComplete, userId }: ProfileOnboardingM
         goal: profile.goal,
         daily_calorie_goal: profile.daily_calorie_goal ? parseInt(profile.daily_calorie_goal) : null,
         daily_water_goal_ml: parseInt(profile.daily_water_goal_ml),
-      }, { onConflict: 'user_id' });
+      };
 
-      if (error) throw error;
+      const { error } = await supabase.from("user_profiles").upsert(profileData, { onConflict: 'user_id' });
+
+      if (error) {
+        console.error("Database error:", error);
+        throw error;
+      }
 
       toast({
         title: "Welcome! 🎉",
@@ -74,9 +80,10 @@ const ProfileOnboardingModal = ({ open, onComplete, userId }: ProfileOnboardingM
       });
       onComplete();
     } catch (error: any) {
+      console.error("Error saving profile:", error);
       toast({
         title: "Error",
-        description: error.message || "Failed to save profile",
+        description: error.message || "Failed to save profile. Please check all fields are filled correctly.",
         variant: "destructive",
       });
     } finally {
