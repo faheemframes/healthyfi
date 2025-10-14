@@ -325,14 +325,6 @@ const EnhancedDashboard = ({
               <span>Log Meal</span>
             </Button>
             
-            <Button 
-              variant="outline" 
-              className="h-20 flex flex-col items-center justify-center gap-2"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            >
-              <Clock className="h-6 w-6" />
-              <span>Set Reminder</span>
-            </Button>
           </div>
         </CardContent>
       </Card>
