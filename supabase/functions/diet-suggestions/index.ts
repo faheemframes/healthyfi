@@ -101,7 +101,8 @@ Example format: ["Your calorie intake is below your goal. Consider adding a heal
         });
       }
       const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
+      // Server-side logging is OK for edge functions
+      console.error("[Server] AI gateway error:", response.status, errorText);
       throw new Error("AI gateway error");
     }
 
@@ -116,7 +117,8 @@ Example format: ["Your calorie intake is below your goal. Consider adding a heal
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Error in diet-suggestions function:", error);
+    // Server-side logging is OK for edge functions
+    console.error("[Server] Error in diet-suggestions function:", error);
     const message = error instanceof Error ? error.message : "Unknown error";
     return new Response(JSON.stringify({ error: message }), {
       status: 500,

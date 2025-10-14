@@ -70,7 +70,9 @@ const ProfileOnboardingModal = ({ open, onComplete, userId }: ProfileOnboardingM
       const { error } = await supabase.from("user_profiles").upsert(profileData, { onConflict: 'user_id' });
 
       if (error) {
-        console.error("Database error:", error);
+        if (import.meta.env.DEV) {
+          console.error("Database error:", error);
+        }
         throw error;
       }
 
@@ -80,7 +82,9 @@ const ProfileOnboardingModal = ({ open, onComplete, userId }: ProfileOnboardingM
       });
       onComplete();
     } catch (error: any) {
-      console.error("Error saving profile:", error);
+      if (import.meta.env.DEV) {
+        console.error("Error saving profile:", error);
+      }
       toast({
         title: "Error",
         description: error.message || "Failed to save profile. Please check all fields are filled correctly.",

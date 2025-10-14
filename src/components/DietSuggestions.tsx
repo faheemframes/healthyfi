@@ -37,7 +37,9 @@ const DietSuggestions = ({ calorieIntake, waterIntake, userProfile }: DietSugges
       });
 
       if (error) {
-        console.error("Edge function error:", error);
+        if (import.meta.env.DEV) {
+          console.error("Edge function error:", error);
+        }
         throw new Error(error.message || "Failed to generate suggestions");
       }
 
@@ -74,7 +76,9 @@ const DietSuggestions = ({ calorieIntake, waterIntake, userProfile }: DietSugges
         description: "AI has analyzed your intake and provided personalized tips.",
       });
     } catch (error: any) {
-      console.error("Error getting suggestions:", error);
+      if (import.meta.env.DEV) {
+        console.error("Error getting suggestions:", error);
+      }
       toast({
         title: "Error",
         description: error.message || "Failed to get AI suggestions. Please try again.",

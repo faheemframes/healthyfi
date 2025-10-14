@@ -84,7 +84,9 @@ const MealForm = ({ userId, onMealAdded }: MealFormProps) => {
         });
       }
     } catch (error: any) {
-      console.error("Scan error:", error);
+      if (import.meta.env.DEV) {
+        console.error("Scan error:", error);
+      }
       toast({
         title: "Scan Unavailable",
         description: "Food recognition is currently in demo mode. Please enter your meal manually.",
