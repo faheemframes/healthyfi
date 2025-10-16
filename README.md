@@ -1,4 +1,5 @@
 # HeatlthyFi - Nutrition Tracking Dashboard
+MADE BY Faheem, Rayaan, Dhruv, Yash.
 
 A modern nutrition tracking application built with React, TypeScript, and Supabase. Track your meals, water intake, and get AI-powered health suggestions.
 
@@ -139,17 +140,6 @@ If you encounter any issues:
 3. Ensure all environment variables are set correctly
 4. Check that the database tables exist and have the correct schema
 
-## Deployment
-
-### Deploy with Lovable
-
-Simply open [Lovable](https://lovable.dev) and click on Share -> Publish.
-
-### Deploy with Vercel/Netlify
-
-1. Build the project: `npm run build`
-2. Deploy the `dist` folder to your preferred platform
-3. Set environment variables in your deployment platform
 
 ## Contributing
 
