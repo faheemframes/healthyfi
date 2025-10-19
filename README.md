@@ -1,5 +1,5 @@
 # HeatlthyFi - Nutrition Tracking Dashboard
-MADE BY Faheem, Rayaan, Dhruv, Yash.
+
 
 A modern nutrition tracking application built with React, TypeScript, and Supabase. Track your meals, water intake, and get AI-powered health suggestions.
 
